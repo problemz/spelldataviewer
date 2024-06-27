@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell Data Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body onload="preFillURL()">
+    <div class="container">
+        <div id="classFilter">
+            <h2>Class Filters</h2>
+            <label><input type="checkbox" id="hidePassives"> Hide Passives</label>
+            <label><input type="checkbox" id="hideHidden"> Hide Hidden</label>
+            <button id="selectUnselectAll">Select/Unselect All</button>
+            <div id="classCheckboxes">
+                <!-- Checkboxes will be dynamically added here -->
+            </div>
+        </div>
+        <div id="spellViewer">
+            <h1>Spell Data Viewer</h1>
+            <input type="text" id="urlInput" placeholder="Enter URL of spell data">
+            <button onclick="fetchSpellData()">Fetch Data</button>
+            <input type="text" id="searchInput" placeholder="Search for a spell by name or ID">
+            <select id="spellSelect">
+                <option value="">Select a spell</option>
+            </select>
+            <textarea id="spellDetails" rows="10" placeholder="Spell details will appear here..."></textarea>
+            <button onclick="copySpellName()">Copy Spell Name</button>
+            <input type="text" id="copySpellNameText" class="copy-input" readonly>
+            <div id="copyNameTooltip" class="tooltip">Copied!</div>
+
+            <button onclick="copySpellId()">Copy Spell ID</button>
+            <input type="text" id="copySpellIdText" class="copy-input" readonly>
+            <div id="copyIdTooltip" class="tooltip">Copied!</div>
+
+            <button onclick="copySpell()">Copy Spell</button>
+            <input type="text" id="copySpellText" class="copy-input" readonly>
+            <div id="copyTooltip" class="tooltip">Copied!</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        function preFillURL() {
+            document.getElementById('urlInput').value = 'https://raw.githubusercontent.com/simulationcraft/simc/thewarwithin/SpellDataDump/allspells.txt';
+        }
+    </script>
+</body>
+</html>
