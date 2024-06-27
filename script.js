@@ -136,7 +136,10 @@ function populateClassFilter() {
     const classFilters = document.getElementById('classCheckboxes');
     classFilters.innerHTML = ''; // Clear previous contents
 
-    mainClasses.forEach(mainClass => {
+    // Sort mainClasses alphabetically
+    const sortedClasses = mainClasses.sort();
+
+    sortedClasses.forEach(mainClass => {
         const classGroupDiv = document.createElement('div');
         classGroupDiv.className = 'class-group';
 
@@ -165,6 +168,7 @@ function populateClassFilter() {
         classFilters.appendChild(classGroupDiv);
     });
 }
+
 
 function populateSpellSelect() {
     const spellSelect = document.getElementById('spellSelect');
@@ -228,9 +232,10 @@ function filterSpells() {
     spellSelect.addEventListener('change', displaySpellDetails);
 }
 
+
 function filterSpellsByClass() {
     const selectedClasses = [];
-    document.querySelectorAll('#classFilter input[type="checkbox"]:checked').forEach(checkbox => {
+    document.querySelectorAll('#classFilters input[type="checkbox"]:checked').forEach(checkbox => {
         selectedClasses.push(checkbox.id);
     });
 
@@ -257,6 +262,7 @@ function filterSpellsByClass() {
 
     spellSelect.addEventListener('change', displaySpellDetails);
 }
+
 
 function updateCheckboxes() {
     hidePassives = document.getElementById('hidePassives').checked;

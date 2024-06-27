@@ -10,30 +10,35 @@ body {
     padding: 20px;
 }
 
-#classFilter {
+#filterSidebar {
     background-color: #333;
     padding: 20px;
     border-radius: 8px;
     width: 25%;
 }
 
-#classFilter h2 {
+#spellFilters, #classFilters {
+    margin-bottom: 20px;
+}
+
+#spellFilters h2, #classFilters h2 {
     color: #ffffff;
 }
 
-/* Updated styles for inline labels */
-#classFilter label {
+/* Ensures the label and checkbox are aligned */
+#filterSidebar label {
     display: inline-flex;
     align-items: center;
     margin-bottom: 10px;
     cursor: pointer;
+    font-size: 16px; /* Font size for all labels */
 }
 
-#classFilter input[type="checkbox"] {
+#filterSidebar input[type="checkbox"] {
     margin-right: 10px;
 }
 
-#classFilter button {
+#filterSidebar button {
     display: block;
     width: 100%;
     margin-top: 10px;
@@ -44,6 +49,12 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.class-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .class-icon {
@@ -114,20 +125,4 @@ body {
 
 .show-tooltip {
     display: block;
-}
-
-.class-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.class-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-}
-
-label {
-    font-size: 16px;
 }
