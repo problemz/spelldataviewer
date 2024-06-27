@@ -96,6 +96,30 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: auto;
+	transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+#spellViewer button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+#copyAllSpellsButton {
+    width: 100%; /* Full width */
+    padding: 15px; /* Adjust padding for better size */
+    font-size: 24px; /* Set font size */
+    border: 1px solid #007bff; /* Add border styling */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #007bff; /* Button color */
+    color: white; /* Text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    text-align: center; /* Center text */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    margin-top: 30px; /* Add space above the button */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+#copyAllSpellsButton:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
 .copy-input {
@@ -117,12 +141,11 @@ body {
     border-radius: 4px;
     position: absolute;
     z-index: 1;
-    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-bottom: 5px;
+    white-space: nowrap;
 }
 
 .show-tooltip {
-    display: block;
+    display: inline-block;
 }

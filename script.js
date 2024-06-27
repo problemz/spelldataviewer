@@ -317,13 +317,27 @@ function selectUnselectAll() {
     filterSpellsByClass();
 }
 
+function copyAllSpells() {
+    const spellSelect = document.getElementById('spellSelect');
+    let allSpellsText = '';
+    
+    for (let i = 1; i < spellSelect.options.length; i++) { // Start from 1 to skip the first "Select a spell" option
+        const option = spellSelect.options[i];
+        const [spellName, spellId] = option.textContent.split(' (ID: ');
+        const cleanedSpellId = spellId.replace(')', '');
+        allSpellsText += `${sanitizeSpellName(spellName)} = ${cleanedSpellId},\n`;
+    }
+    
+    copyToClipboard(allSpellsText, 'copyAllSpellsTooltip');
+}
+
 function copyToClipboard(text, tooltipId) {
-    const tempInput = document.createElement('input');
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
+    const tempTextarea = document.createElement('textarea');
+    tempTextarea.value = text;
+    document.body.appendChild(tempTextarea);
+    tempTextarea.select();
     document.execCommand('copy');
-    document.body.removeChild(tempInput);
+    document.body.removeChild(tempTextarea);
 
     const tooltip = document.getElementById(tooltipId);
     tooltip.classList.add('show-tooltip');

@@ -31,17 +31,29 @@
                 <option value="">Select a spell</option>
             </select>
             <textarea id="spellDetails" rows="10" placeholder="Spell details will appear here..."></textarea>
-            <button onclick="copySpellName()">Copy Spell Name</button>
+            
+            <div style="position: relative;">
+                <button onclick="copySpellName()">Copy Spell Name</button>
+                <div id="copyNameTooltip" class="tooltip">Copied!</div>
+            </div>
             <input type="text" id="copySpellNameText" class="copy-input" readonly>
-            <div id="copyNameTooltip" class="tooltip">Copied!</div>
 
-            <button onclick="copySpellId()">Copy Spell ID</button>
+            <div style="position: relative;">
+                <button onclick="copySpellId()">Copy Spell ID</button>
+                <div id="copyIdTooltip" class="tooltip">Copied!</div>
+            </div>
             <input type="text" id="copySpellIdText" class="copy-input" readonly>
-            <div id="copyIdTooltip" class="tooltip">Copied!</div>
 
-            <button onclick="copySpell()">Copy Spell</button>
+            <div style="position: relative;">
+                <button onclick="copySpell()">Copy Spell</button>
+                <div id="copyTooltip" class="tooltip">Copied!</div>
+            </div>
             <input type="text" id="copySpellText" class="copy-input" readonly>
-            <div id="copyTooltip" class="tooltip">Copied!</div>
+
+            <div style="position: relative; width: 100%;">
+                <button id="copyAllSpellsButton" onclick="copyAllSpells()">Copy All Spells</button>
+                <div id="copyAllSpellsTooltip" class="tooltip">Copied!</div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
