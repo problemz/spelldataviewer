@@ -182,7 +182,6 @@ function displaySpellDetails() {
     if (spell) {
         spellDetails.value = Object.entries(spell).map(([key, value]) => `${key}: ${value}`).join('\n');
         const spellName = sanitizeSpellName(spell['Name']);
-        const spellId = spell['id'];
         document.getElementById('copySpellText').value = `${spellName} = ${spellId},`;
         document.getElementById('copySpellNameText').value = spellName;
         document.getElementById('copySpellIdText').value = spellId;
@@ -194,14 +193,22 @@ function displaySpellDetails() {
     }
 }
 
+
 function sanitizeSpellName(name) {
+    // Find the position of the first bracket and trim the name up to that point
+    const bracketIndex = name.indexOf('(');
+    if (bracketIndex !== -1) {
+        name = name.substring(0, bracketIndex).trim();
+    }
+
+    // Remove any remaining unwanted characters and capitalize words
     return name
-        .replace(/\(id=\d+\)\s*\[Spell Family\s*\(\d+\)\]/, '') // Remove the ID and Spell Family part
         .replace(/[^a-zA-Z0-9\s]/g, '') // Remove special characters
         .split(' ') // Split by space
         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
         .join(''); // Join all words without spaces
 }
+
 
 function filterSpells() {
     const searchInput = document.getElementById('searchInput').value.toLowerCase();
@@ -234,16 +241,14 @@ function filterSpellsByClass() {
     spellSelect.innerHTML = '<option value="">Select a spell</option>';
 
     if (selectedClasses.length === 0) {
-        // If no class checkboxes are selected, do not populate the dropdown
         return;
     }
 
     spells.filter(spell => {
         const isPassive = spell['Name'] && spell['Name'].toLowerCase().includes('passive');
         const isHidden = spell['Name'] && spell['Name'].toLowerCase().includes('hidden');
-        const spellClasses = spell['Class'] ? spell['Class'].split(', ') : [];
         const spellFamilyId = spell['Spell Family ID'];
-        return (!hidePassives || !isPassive) && (!hideHidden || !isHidden) && (selectedClasses.some(selectedClass => spellClasses.includes(selectedClass)) || selectedClasses.includes(spellFamilyMapping[spellFamilyId]));
+        return (!hidePassives || !isPassive) && (!hideHidden || !isHidden) && selectedClasses.includes(spellFamilyMapping[spellFamilyId]);
     }).forEach(spell => {
         const option = document.createElement('option');
         const spellName = spell['Name'] || 'Unnamed Spell';
