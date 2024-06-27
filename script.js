@@ -181,7 +181,7 @@ function displaySpellDetails() {
 
     if (spell) {
         spellDetails.value = Object.entries(spell).map(([key, value]) => `${key}: ${value}`).join('\n');
-        const spellName = spell['Name'].split(' ')[0].replace(/[^a-zA-Z]/g, '');
+        const spellName = sanitizeSpellName(spell['Name']);
         const spellId = spell['id'];
         document.getElementById('copySpellText').value = `${spellName} = ${spellId},`;
         document.getElementById('copySpellNameText').value = spellName;
@@ -192,6 +192,15 @@ function displaySpellDetails() {
         document.getElementById('copySpellNameText').value = '';
         document.getElementById('copySpellIdText').value = '';
     }
+}
+
+function sanitizeSpellName(name) {
+    return name
+        .replace(/\(id=\d+\)\s*\[Spell Family\s*\(\d+\)\]/, '') // Remove the ID and Spell Family part
+        .replace(/[^a-zA-Z0-9\s]/g, '') // Remove special characters
+        .split(' ') // Split by space
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+        .join(''); // Join all words without spaces
 }
 
 function filterSpells() {
