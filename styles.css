@@ -115,3 +115,19 @@ body {
 .show-tooltip {
     display: block;
 }
+
+.class-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.class-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+label {
+    font-size: 16px;
+}

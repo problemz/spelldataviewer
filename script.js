@@ -27,6 +27,38 @@ const mainClasses = [
     'Demon Hunter', 'Evoker'
 ];
 
+const classColors = {
+    'Death Knight': '#C41F3B',
+    'Demon Hunter': '#A330C9',
+    'Druid': '#FF7D0A',
+    'Evoker': '#33937F',
+    'Hunter': '#ABD473',
+    'Mage': '#69CCF0',
+    'Monk': '#00FF96',
+    'Paladin': '#F58CBA',
+    'Priest': '#FFFFFF',
+    'Rogue': '#FFF569',
+    'Shaman': '#0070DE',
+    'Warlock': '#9482C9',
+    'Warrior': '#C79C6E',
+};
+
+const classIcons = {
+    'Death Knight': 'ClassIcon_DeathKnight.png',
+    'Demon Hunter': 'ClassIcon_DemonHunter.png',
+    'Druid': 'ClassIcon_Druid.png',
+    'Evoker': 'ClassIcon_Evoker.png',
+    'Hunter': 'ClassIcon_Hunter.png',
+    'Mage': 'ClassIcon_Mage.png',
+    'Monk': 'ClassIcon_Monk.png',
+    'Paladin': 'ClassIcon_Paladin.png',
+    'Priest': 'ClassIcon_Priest.png',
+    'Rogue': 'ClassIcon_Rogue.png',
+    'Shaman': 'ClassIcon_Shaman.png',
+    'Warlock': 'ClassIcon_Warlock.png',
+    'Warrior': 'ClassIcon_Warrior.png',
+};
+
 function fetchSpellData() {
     const input = document.getElementById('urlInput').value.trim();
     if (!input) {
@@ -101,54 +133,8 @@ function parseSpellData(data) {
 }
 
 function populateClassFilter() {
-    const classFilter = document.getElementById('classFilter');
-    const specMap = {};
-
-    spells.forEach(spell => {
-        const isPassive = spell['Name'] && spell['Name'].toLowerCase().includes('passive');
-        const isHidden = spell['Name'] && spell['Name'].toLowerCase().includes('hidden');
-        if ((!hidePassives || !isPassive) && (!hideHidden || !isHidden) && spell['Class']) {
-            const spellFamilyId = spell['Spell Family ID'];
-            if (spellFamilyId && spellFamilyMapping[spellFamilyId]) {
-                const spec = spellFamilyMapping[spellFamilyId];
-                if (!specMap[spec]) {
-                    specMap[spec] = [];
-                }
-                specMap[spec].push(spell);
-            }
-        }
-    });
-
-    classFilter.innerHTML = '<h2>Class Filters</h2>';
-    const hidePassivesCheckbox = document.createElement('input');
-    hidePassivesCheckbox.type = 'checkbox';
-    hidePassivesCheckbox.id = 'hidePassives';
-    hidePassivesCheckbox.onclick = updateCheckboxes;
-    classFilter.appendChild(hidePassivesCheckbox);
-
-    const hidePassivesLabel = document.createElement('label');
-    hidePassivesLabel.htmlFor = 'hidePassives';
-    hidePassivesLabel.textContent = ' Hide Passives';
-    classFilter.appendChild(hidePassivesLabel);
-    classFilter.appendChild(document.createElement('br'));
-
-    const hideHiddenCheckbox = document.createElement('input');
-    hideHiddenCheckbox.type = 'checkbox';
-    hideHiddenCheckbox.id = 'hideHidden';
-    hideHiddenCheckbox.onclick = updateCheckboxes;
-    classFilter.appendChild(hideHiddenCheckbox);
-
-    const hideHiddenLabel = document.createElement('label');
-    hideHiddenLabel.htmlFor = 'hideHidden';
-    hideHiddenLabel.textContent = ' Hide Hidden';
-    classFilter.appendChild(hideHiddenLabel);
-    classFilter.appendChild(document.createElement('br'));
-
-    const selectAllBtn = document.createElement('button');
-    selectAllBtn.id = 'selectAllBtn';
-    selectAllBtn.textContent = 'Select/Unselect All';
-    selectAllBtn.onclick = selectUnselectAll;
-    classFilter.appendChild(selectAllBtn);
+    const classFilters = document.getElementById('classCheckboxes');
+    classFilters.innerHTML = ''; // Clear previous contents
 
     mainClasses.forEach(mainClass => {
         const classGroupDiv = document.createElement('div');
@@ -162,10 +148,21 @@ function populateClassFilter() {
 
         const mainClassLabel = document.createElement('label');
         mainClassLabel.htmlFor = mainClass;
-        mainClassLabel.textContent = mainClass;
-        classGroupDiv.appendChild(mainClassLabel);
 
-        classFilter.appendChild(classGroupDiv);
+        const iconImg = document.createElement('img');
+        iconImg.src = `icons/${classIcons[mainClass]}`;
+        iconImg.alt = `${mainClass} Icon`;
+        iconImg.className = 'class-icon';
+        mainClassLabel.appendChild(iconImg);
+
+        const labelText = document.createTextNode(` ${mainClass}`);
+        mainClassLabel.appendChild(labelText);
+        mainClassLabel.style.color = classColors[mainClass];
+        mainClassLabel.style.fontWeight = 'bold';
+        mainClassLabel.style.textShadow = '1px 1px 2px black';
+
+        classGroupDiv.appendChild(mainClassLabel);
+        classFilters.appendChild(classGroupDiv);
     });
 }
 
