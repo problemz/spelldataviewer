@@ -1,9 +1,31 @@
 document.getElementById('urlInput').addEventListener('change', fetchSpellData);
 document.querySelector('button').addEventListener('click', fetchSpellData);
-
+document.getElementById('searchInput').addEventListener('input', filterSpells);
 let spells = [];
 let hidePassives = false;
 let hideHidden = false;
+
+const spellFamilyMapping = {
+    15: 'Death Knight',
+    107: 'Demon Hunter',
+    7: 'Druid',
+    224: 'Evoker',
+    9: 'Hunter',
+    3: 'Mage',
+    53: 'Monk',
+    10: 'Paladin',
+    6: 'Priest',
+    8: 'Rogue',
+    11: 'Shaman',
+    5: 'Warlock',
+    4: 'Warrior',
+};
+
+const mainClasses = [
+    'Mage', 'Warrior', 'Warlock', 'Priest', 'Druid', 'Rogue',
+    'Hunter', 'Paladin', 'Shaman', 'Death Knight', 'Monk',
+    'Demon Hunter', 'Evoker'
+];
 
 function fetchSpellData() {
     const input = document.getElementById('urlInput').value.trim();
@@ -64,25 +86,36 @@ function parseSpellData(data) {
         spells.push(currentSpell);
     }
 
+    // Remove spells without a valid spell family ID
+    spells = spells.filter(spell => {
+        const spellFamilyMatch = spell['Name'].match(/\[Spell Family \((\d+)\)\]/);
+        if (spellFamilyMatch) {
+            spell['Spell Family ID'] = spellFamilyMatch[1];
+            return true;
+        }
+        return false;
+    });
+
     populateClassFilter();
     populateSpellSelect();
 }
 
 function populateClassFilter() {
     const classFilter = document.getElementById('classFilter');
-    const classMap = {};
+    const specMap = {};
 
     spells.forEach(spell => {
         const isPassive = spell['Name'] && spell['Name'].toLowerCase().includes('passive');
         const isHidden = spell['Name'] && spell['Name'].toLowerCase().includes('hidden');
         if ((!hidePassives || !isPassive) && (!hideHidden || !isHidden) && spell['Class']) {
-            const classes = spell['Class'].split(', ');
-            classes.forEach(cls => {
-                if (!classMap[cls]) {
-                    classMap[cls] = [];
+            const spellFamilyId = spell['Spell Family ID'];
+            if (spellFamilyId && spellFamilyMapping[spellFamilyId]) {
+                const spec = spellFamilyMapping[spellFamilyId];
+                if (!specMap[spec]) {
+                    specMap[spec] = [];
                 }
-                classMap[cls].push(spell);
-            });
+                specMap[spec].push(spell);
+            }
         }
     });
 
@@ -117,7 +150,7 @@ function populateClassFilter() {
     selectAllBtn.onclick = selectUnselectAll;
     classFilter.appendChild(selectAllBtn);
 
-    Object.keys(classMap).forEach(mainClass => {
+    mainClasses.forEach(mainClass => {
         const classGroupDiv = document.createElement('div');
         classGroupDiv.className = 'class-group';
 
@@ -139,17 +172,6 @@ function populateClassFilter() {
 function populateSpellSelect() {
     const spellSelect = document.getElementById('spellSelect');
     spellSelect.innerHTML = '<option value="">Select a spell</option>';
-
-    spells.forEach(spell => {
-        const option = document.createElement('option');
-        const spellName = spell['Name'] || 'Unnamed Spell';
-        const spellId = spell['id'] || 'No ID';
-        option.value = spellId;
-        option.textContent = `${spellName} (ID: ${spellId})`;
-        spellSelect.appendChild(option);
-    });
-
-    spellSelect.addEventListener('change', displaySpellDetails);
 }
 
 function displaySpellDetails() {
@@ -189,6 +211,8 @@ function filterSpells() {
         option.textContent = `${spellName} (ID: ${spellId})`;
         spellSelect.appendChild(option);
     });
+
+    spellSelect.addEventListener('change', displaySpellDetails);
 }
 
 function filterSpellsByClass() {
@@ -200,11 +224,17 @@ function filterSpellsByClass() {
     const spellSelect = document.getElementById('spellSelect');
     spellSelect.innerHTML = '<option value="">Select a spell</option>';
 
+    if (selectedClasses.length === 0) {
+        // If no class checkboxes are selected, do not populate the dropdown
+        return;
+    }
+
     spells.filter(spell => {
         const isPassive = spell['Name'] && spell['Name'].toLowerCase().includes('passive');
         const isHidden = spell['Name'] && spell['Name'].toLowerCase().includes('hidden');
         const spellClasses = spell['Class'] ? spell['Class'].split(', ') : [];
-        return (!hidePassives || !isPassive) && (!hideHidden || !isHidden) && selectedClasses.some(selectedClass => spellClasses.includes(selectedClass));
+        const spellFamilyId = spell['Spell Family ID'];
+        return (!hidePassives || !isPassive) && (!hideHidden || !isHidden) && (selectedClasses.some(selectedClass => spellClasses.includes(selectedClass)) || selectedClasses.includes(spellFamilyMapping[spellFamilyId]));
     }).forEach(spell => {
         const option = document.createElement('option');
         const spellName = spell['Name'] || 'Unnamed Spell';
@@ -214,7 +244,7 @@ function filterSpellsByClass() {
         spellSelect.appendChild(option);
     });
 
-    updateClassCheckboxes();
+    spellSelect.addEventListener('change', displaySpellDetails);
 }
 
 function updateCheckboxes() {
